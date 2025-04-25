@@ -24,12 +24,15 @@ class ProductApiIntegrationTest(APITestCase):
         super().tearDownClass()
 
     def setUp(self):
-        Product.objects.all().delete()
-        ProductCategory.objects.all().delete()
         seed_product_categories()
         seed_products()
         self.collection_url = reverse("products")
         self.detail_url = reverse("product-detail", args=[1])
+
+    def tearDown(self):
+        Product.objects.all().delete()
+        ProductCategory.objects.all().delete()
+        return super().tearDown()
 
     # Test for GET /products
 

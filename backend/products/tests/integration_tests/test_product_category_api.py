@@ -2,6 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from mongoengine import connect, disconnect
+from mongoengine.connection import get_connection
 from products.models import ProductCategory
 from products.tests.scripts.product_seeds import seed_product_categories
 
@@ -9,7 +10,6 @@ from products.tests.scripts.product_seeds import seed_product_categories
 class ProductCategoryApiIntegrationTest(APITestCase):
     @classmethod
     def setUpClass(cls):
-        # Set up test database connection
         disconnect()
         connect(
             db="test_product_db", host="mongodb://localhost:27017/", alias="default"
@@ -18,19 +18,19 @@ class ProductCategoryApiIntegrationTest(APITestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # Clean up test database
-        from mongoengine.connection import get_connection
-
         conn = get_connection()
         conn.drop_database("test_product_db")
         disconnect()
         super().tearDownClass()
 
     def setUp(self):
-        ProductCategory.objects.all().delete()
         seed_product_categories()
         self.collection_url = reverse("product-categories")
         self.detail_url = reverse("product-category-detail", args=[1])
+    
+    def tearDown(self):
+        ProductCategory.objects.all().delete()
+        return super().tearDown()
 
     # Test for GET /categories
 
