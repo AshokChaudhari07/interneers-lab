@@ -1,31 +1,27 @@
-import { useState } from "react";
 import "./Product.css";
 
 function Product({ product }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   return (
-    <div
-      className={`product-card card h-100 ${isExpanded ? "expanded" : ""}`}
-      onClick={() => setIsExpanded(!isExpanded)}
-      style={{ cursor: "pointer" }}
-    >
+    <div className="product-card card h-100">
       <div className="card-body">
         <h5 className="card-title">{product.name}</h5>
         <p className="card-text text-primary fs-5">${product.price}</p>
-
-        {isExpanded && (
-          <div className="additional-details">
-            <h6 className="card-subtitle mb-2 text-muted">{product.brand}</h6>
-            <p className="card-text text-secondary">{product.description}</p>
-            <div className="mt-2">
-              <span className="badge bg-info">{product.category}</span>
-              <span className="badge bg-success ms-2">
-                Stock: {product.quantity}
-              </span>
-            </div>
+        <div className="additional-details">
+          <h6 className="card-subtitle mb-2 text-muted">{product.brand}</h6>
+          <p className="card-text text-secondary">{product.description}</p>
+          <div className="mt-3">
+            <p className="text-muted mb-1">
+              <strong>Category:</strong> {product.category}
+            </p>
+            <p className="text-muted">
+              <strong>Stock:</strong> {product.quantity}
+            </p>
           </div>
-        )}
+          <div className="mt-3">
+            <button className="btn btn-primary">Edit</button>
+            <button className="btn btn-outline-danger ms-2">Delete</button>
+          </div>
+        </div>
       </div>
     </div>
   );
