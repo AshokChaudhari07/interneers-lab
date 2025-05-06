@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "components/Header";
 import Navbar from "components/Navbar";
 import ProductList from "components/ProductList";
 import Pagination from "components/Pagination";
+import AddProduct from "components/AddProduct";
 
 const BASE_PRODUCT_URL = "http://127.0.0.1:8000/api/products/";
 const PAGE_SIZE = 6;
@@ -26,47 +28,59 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `${BASE_PRODUCT_URL}?page=${currentPage}&page_size=${PAGE_SIZE}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch products.");
-        }
-        const data = await response.json();
-        setProducts(data.results);
-        setTotalPages(Math.ceil(data.count / PAGE_SIZE));
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${BASE_PRODUCT_URL}?page=${currentPage}&page_size=${PAGE_SIZE}`
+      );
+      const data = await response.json();
+      setProducts(data.results);
+      setTotalPages(Math.ceil(data.count / PAGE_SIZE));
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Unknown error occurred");
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProducts();
   }, [currentPage]);
 
   return (
     <>
       <Navbar />
-      <Header />
-      {loading ? (
-        <p>Loading products...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : (
-        <>
-          <ProductList products={products} />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </>
-      )}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            loading ? (
+              <p>Loading products...</p>
+            ) : error ? (
+              <p>Error: {error}</p>
+            ) : (
+              <>
+                <Header />
+                <ProductList products={products} />
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
+              </>
+            )
+          }
+        />
+        <Route
+          path="/add-product"
+          element={<AddProduct onProductCreated={fetchProducts} />}
+        />
+      </Routes>
     </>
   );
 };
