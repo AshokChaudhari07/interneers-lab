@@ -22,18 +22,29 @@ interface Product {
   updated_at: string;
 }
 
+interface Category {
+  title: string;
+  description: string;
+}
+
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
+      const categoryParam = selectedCategory
+        ? `&category=${selectedCategory.title}`
+        : "";
       const response = await fetch(
-        `${BASE_PRODUCT_URL}?page=${currentPage}&page_size=${PAGE_SIZE}`
+        `${BASE_PRODUCT_URL}?page=${currentPage}&page_size=${PAGE_SIZE}${categoryParam}`
       );
       const data = await response.json();
       setProducts(data.results);
@@ -47,7 +58,7 @@ const App = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage]);
+  }, [currentPage, selectedCategory]);
 
   const handleDelete = async (id: string) => {
     try {
@@ -68,7 +79,7 @@ const App = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar onCategorySelect={setSelectedCategory} />
       <Routes>
         <Route
           path="/"
@@ -79,7 +90,7 @@ const App = () => {
               <p className="text-danger text-center mt-4">Error: {error}</p>
             ) : (
               <>
-                <Header />
+                <Header category={selectedCategory} />
                 <ProductList products={products} onDelete={handleDelete} />
                 <Pagination
                   currentPage={currentPage}

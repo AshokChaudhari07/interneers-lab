@@ -1,12 +1,22 @@
 import { Link } from "react-router-dom";
+import CategoryDropdown from "./CategoryDropdown";
 
-const Navbar = () => {
+interface Category {
+  title: string;
+  description: string;
+}
+
+interface NavbarProps {
+  onCategorySelect: (category: Category | null) => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onCategorySelect }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-lg sticky-top">
       <div className="container">
-        <a className="navbar-brand fw-bold fs-3 text-primary" href="/">
+        <Link className="navbar-brand fw-bold fs-3 text-primary" to="/">
           Ripp<span className="text-dark">Kart</span>
-        </a>
+        </Link>
 
         <button
           className="navbar-toggler"
@@ -22,6 +32,9 @@ const Navbar = () => {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 d-flex align-items-center">
+            <li className="nav-item">
+              <CategoryDropdown onCategorySelect={onCategorySelect} />
+            </li>
             <li className="nav-item">
               <Link to="/add-product" className="btn btn-outline-success me-2">
                 <i className="bi bi-plus-circle me-1"></i> Add New Product
@@ -47,14 +60,14 @@ const Navbar = () => {
 
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/">
+              <Link className="nav-link active" to="/">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/about">
+              <Link className="nav-link" to="/about">
                 About Us
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
