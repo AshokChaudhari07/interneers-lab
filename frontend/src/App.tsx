@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { Routes, Route } from "react-router-dom";
 import Header from "components/Header";
 import Navbar from "components/Navbar";
 import ProductList from "components/ProductList";
@@ -29,7 +29,7 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(
@@ -47,11 +47,24 @@ const App = () => {
     } finally {
       setLoading(false);
     }
+  }, [currentPage]);
+
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(`${BASE_PRODUCT_URL}${id}/`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Failed to delete product.");
+      fetchProducts(); // Refresh list
+    } catch (err: any) {
+      alert(`Error: ${err.message}`);
+    }
   };
 
   useEffect(() => {
     fetchProducts();
-  }, [currentPage]);
+  }, [fetchProducts]);
 
   return (
     <>
@@ -61,13 +74,13 @@ const App = () => {
           path="/"
           element={
             loading ? (
-              <p>Loading products...</p>
+              <p className="text-center mt-4">Loading products...</p>
             ) : error ? (
-              <p>Error: {error}</p>
+              <p className="text-danger text-center mt-4">Error: {error}</p>
             ) : (
               <>
                 <Header />
-                <ProductList products={products} />
+                <ProductList products={products} onDelete={handleDelete} />
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}

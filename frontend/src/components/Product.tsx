@@ -13,9 +13,16 @@ interface ProductData {
 
 interface ProductProps {
   product: ProductData;
+  onDelete: (id: string) => void;
 }
 
-const Product: React.FC<ProductProps> = ({ product }) => {
+const Product: React.FC<ProductProps> = ({ product, onDelete }) => {
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      onDelete(product.id);
+    }
+  };
+
   return (
     <div className="product-card card h-100">
       <div className="card-body">
@@ -39,7 +46,12 @@ const Product: React.FC<ProductProps> = ({ product }) => {
             >
               Edit
             </Link>
-            <button className="btn btn-outline-danger ms-2">Delete</button>
+            <button
+              className="btn btn-outline-danger ms-2"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>
