@@ -78,6 +78,11 @@ const App = () => {
     fetchProducts();
   }, [fetchProducts]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory]);
+  
+
   return (
     <>
       <Navbar onCategorySelect={setSelectedCategory} />
