@@ -6,6 +6,7 @@ import ProductList from "components/ProductList";
 import Pagination from "components/Pagination";
 import AddProduct from "components/AddProduct";
 import EditProduct from "components/EditProduct";
+import Footer from "components/Footer";
 
 const BASE_PRODUCT_URL = "http://127.0.0.1:8000/api/products/";
 const PAGE_SIZE = 6;
@@ -110,6 +111,7 @@ const App = () => {
           element={<EditProduct onProductCreated={fetchProducts} />}
         />
       </Routes>
+      <Footer/>
     </>
   );
 };
