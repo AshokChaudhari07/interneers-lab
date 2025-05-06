@@ -5,6 +5,7 @@ import Navbar from "components/Navbar";
 import ProductList from "components/ProductList";
 import Pagination from "components/Pagination";
 import AddProduct from "components/AddProduct";
+import EditProduct from "components/EditProduct";
 
 const BASE_PRODUCT_URL = "http://127.0.0.1:8000/api/products/";
 const PAGE_SIZE = 6;
@@ -79,6 +80,10 @@ const App = () => {
         <Route
           path="/add-product"
           element={<AddProduct onProductCreated={fetchProducts} />}
+        />
+        <Route
+          path="/edit-product/:id"
+          element={<EditProduct onProductCreated={fetchProducts} />}
         />
       </Routes>
     </>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Product.css";
 
 function Product({ product }) {
@@ -18,7 +19,12 @@ function Product({ product }) {
             </p>
           </div>
           <div className="mt-3">
-            <button className="btn btn-primary">Edit</button>
+            <Link
+              to={`/edit-product/${product.id}`}
+              className="btn btn-primary"
+            >
+              Edit
+            </Link>
             <button className="btn btn-outline-danger ms-2">Delete</button>
           </div>
         </div>
