@@ -1,7 +1,21 @@
 import { Link } from "react-router-dom";
 import "./Product.css";
 
-function Product({ product }) {
+interface ProductData {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  brand: string;
+  quantity: number;
+}
+
+interface ProductProps {
+  product: ProductData;
+}
+
+const Product: React.FC<ProductProps> = ({ product }) => {
   return (
     <div className="product-card card h-100">
       <div className="card-body">
@@ -31,6 +45,6 @@ function Product({ product }) {
       </div>
     </div>
   );
-}
+};
 
 export default Product;

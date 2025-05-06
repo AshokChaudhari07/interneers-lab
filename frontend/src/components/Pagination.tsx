@@ -1,4 +1,14 @@
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}) => {
   if (totalPages <= 1) return null;
 
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -27,7 +37,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           </li>
         ))}
 
-        <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+        <li
+          className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+        >
           <button
             className="page-link"
             onClick={() => onPageChange(currentPage + 1)}
