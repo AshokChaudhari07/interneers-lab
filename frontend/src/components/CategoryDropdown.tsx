@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const BASE_CATEGORY_URL = "http://127.0.0.1:8000/api/categories/";
+import { BASE_CATEGORY_URL } from "config/api";
 
 interface Category {
   id: number;

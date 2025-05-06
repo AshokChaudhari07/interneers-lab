@@ -1,6 +1,8 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { BASE_PRODUCT_URL } from "config/api";
+
 interface Category {
   id: number;
   title: string;
@@ -26,7 +28,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onProductCreated }) => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const res = await fetch(`http://127.0.0.1:8000/api/products/${id}/`);
+      const res = await fetch(`${BASE_PRODUCT_URL}${id}/`);
       const data = await res.json();
       setFormData({
         name: data.name,
@@ -65,7 +67,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onProductCreated }) => {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/products/${id}/`, {
+      const res = await fetch(`${BASE_PRODUCT_URL}${id}/`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

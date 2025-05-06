@@ -1,7 +1,8 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-const BASE_CATEGORY_URL = "http://127.0.0.1:8000/api/categories/";
+import { BASE_CATEGORY_URL } from "config/api";
+import { BASE_PRODUCT_URL } from "config/api";
 
 interface Category {
   id: number;
@@ -58,7 +59,7 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductCreated }) => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/products/", {
+      const response = await fetch(`${BASE_PRODUCT_URL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
